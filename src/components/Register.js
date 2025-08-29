@@ -1,39 +1,67 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { Button, Checkbox, Form, Input } from 'antd';
+
+const onFinish = async (values) => {
+    const response = await axios.post('http://localhost:5000/api/v1/users/signup', values);
+    console.log(response);
+};
+
+
+const onFinishFailed = errorInfo => {
+    console.log('Failed:', errorInfo);
+};
 
 const Register = () => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    
-    const submit = async (e) => {
-        e.preventDefault();
-        const obj = {
-            name: name,
-            email: email,
-            password: password
-        }
-        console.log(obj);
-        const response = await axios.post('http://localhost:8000/api/users/create', obj);
-        console.log(response);
 
-    }
+    return <>
+        <h1>Register</h1>
+        <Form
+            name="basic"
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
+            style={{ maxWidth: 600 }}
+            initialValues={{ remember: true }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
+        >
+            <Form.Item
+                label="Username"
+                name="username"
+                rules={[{ required: true, message: 'Username is required' }]}
+            >
+                <Input />
+            </Form.Item>
+            <Form.Item
+                label="Email"
+                name="email"
+                rules={[
+                    { required: true, message: "Email is required" },
+                    { type: "email", message: "Enter a valid email address" }
+                ]}
+            >
+                <Input />
+            </Form.Item>
 
-     return <>
-        <h1>Register</h1>   
-        <form>
-            <label htmlFor="name">Name:</label>         
-            <input type="text" id="name" name="name" onChange={(e)=>setName(e.target.value)} />
-            <br />  
-            <label htmlFor="email">Email:</label>                   
-            <input type="email" id="email" name="email" onChange={(e)=>setEmail(e.target.value)} />
-            <br />
-            <label htmlFor="password">Password:</label>
-            <input type="password" id="password" name="password" onChange={(e)=>setPassword(e.target.value)} />    
-            <br />      
-            <button type="submit" onClick={submit}>Register</button>
-        </form>
-     </>
+            <Form.Item
+                label="Password"
+                name="password"
+                rules={[{ required: true, message: 'Password is required' }]}
+            >
+                <Input.Password />
+            </Form.Item>
+
+            <Form.Item name="remember" valuePropName="checked" label={null}>
+                <Checkbox>Remember me</Checkbox>
+            </Form.Item>
+
+            <Form.Item label={null}>
+                <Button type="success" htmlType="submit" style={{ backgroundColor: "#09883cff", color: "white" }}>
+                    Register
+                </Button>
+            </Form.Item>
+        </Form>
+    </>
 }
 
 export default Register;
