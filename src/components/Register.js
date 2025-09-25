@@ -1,17 +1,17 @@
 import axios from 'axios';
-import { Button, Checkbox, Form, Input } from 'antd';
-
-const onFinish = async (values) => {
-    const response = await axios.post('http://localhost:5000/api/v1/users/signup', values);
-    console.log(response);
-};
-
-
-const onFinishFailed = errorInfo => {
-    console.log('Failed:', errorInfo);
-};
+import { Button, Checkbox, Form, Input, message } from 'antd';
 
 const Register = () => {
+
+    const onFinish = async (values) => {
+        await axios.post('http://localhost:5000/api/v1/users/signup', values);
+        message.success('Registration successful!');
+    };
+
+
+    const onFinishFailed = errorInfo => {
+        console.log('Failed:', errorInfo);
+    };
 
     return <>
         <h1>Register</h1>
@@ -28,6 +28,7 @@ const Register = () => {
             <Form.Item
                 label="Username"
                 name="username"
+
                 rules={[{ required: true, message: 'Username is required' }]}
             >
                 <Input />
